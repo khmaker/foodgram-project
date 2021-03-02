@@ -2,7 +2,7 @@
 <nav class="nav">
     <div class="nav__container container">
         <ul class="nav__items list">
-            <li class="nav__item {% if url_name == 'password_change' %} nav__item_active {% endif %}"><a href="#" class="nav__link link">Рецепты</a></li>
+            <li class="nav__item {% if url_name == 'index' %} nav__item_active {% endif %}"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
         {% if user.is_authenticated %}
             <li class="nav__item {% if url_name == 'password_change' %} nav__item_active {% endif %}"><a href="#" class="nav__link link">Мои подписки</a></li>
             <li class="nav__item {% if url_name == 'password_change' %} nav__item_active {% endif %}"><a href="#" class="nav__link link">Создать рецепт</a></li>

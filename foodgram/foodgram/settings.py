@@ -19,6 +19,7 @@ ALLOWED_HOSTS = env.get('ALLOWED_HOSTS', default='localhost 127.0.0.1').split()
 
 INSTALLED_APPS = [
     'users',
+    'recipes',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
