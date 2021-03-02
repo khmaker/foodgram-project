@@ -1,6 +1,7 @@
 """Django settings file"""
 
 from os import environ as env
+from os import path
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
@@ -10,10 +11,6 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.get('SECRET_KEY', default=get_random_secret_key())
 
 DEBUG = True
@@ -21,6 +18,7 @@ DEBUG = True
 ALLOWED_HOSTS = env.get('ALLOWED_HOSTS', default='localhost 127.0.0.1').split()
 
 INSTALLED_APPS = [
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +40,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'foodgram.urls'
 
-TEMPLATES_DIR = BASE_DIR / 'templates'
+TEMPLATES_DIR = path.join(BASE_DIR, 'templates')
 
 TEMPLATES = [
     {
@@ -68,7 +66,7 @@ DATABASES = {
         'NAME': env.get('POSTGRES_DB', default='postgres'),
         'USER': env.get('POSTGRES_USER', default='postgres'),
         'PASSWORD': env.get('POSTGRES_PASSWORD', default='postgres'),
-        'HOST': env.get('DB_HOST', default='db'),
+        'HOST': env.get('DB_HOST', default='localhost'),
         'PORT': env.get('DB_PORT', default=5432),
     }
 }
@@ -92,7 +90,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Moscow'
 
@@ -103,7 +101,11 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static'
+# STATIC_ROOT = path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (path.join('static'),)
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/'

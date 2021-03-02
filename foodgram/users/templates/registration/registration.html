@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация{% endblock %}
+{% load static  %}
+{% block stylesheet %}<link rel="stylesheet" href="{% static 'pages/form.css' %}">{% endblock %}
+{% block content %}
+<main class="main container">
+
+    <div class="main__header">
+        <h1 class="main__title">Регистрация</h1>
+    </div>
+
+    <div class="form-container">
+
+        <form class="form" method="post">
+
+
+
+
+
+            {% csrf_token %}
+
+            {% for field in form %}
+                {% include 'includes/form group.html' %}
+            {% endfor %}
+
+            <div class="form__footer">
+                <button class="button button_style_blue">Создать аккаунт</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+{% endblock %}
