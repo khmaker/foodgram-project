@@ -14,7 +14,7 @@
             {% endfor %}
         </ul>
         <div class="card__items card__items_column">
-            <p class="card__text"><span class="icon-time"></span> {{ recipe.duration }} мин.</p>
+            <p class="card__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.</p>
             <p class="card__text"><span class="icon-user"></span> <a href="{% url 'author' recipe.author.username %}" style="color: black">{{ recipe.author }}</a></p>
         </div>
     </div>

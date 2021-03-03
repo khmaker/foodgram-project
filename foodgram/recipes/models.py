@@ -1,8 +1,7 @@
 from django.db.models import (Model, ForeignKey, CharField, SlugField,
                               ImageField, TextField, ManyToManyField,
                               PositiveSmallIntegerField, DateTimeField,
-                              TextChoices, CASCADE,
-                              )
+                              TextChoices, CASCADE, )
 
 from users.models import User
 
@@ -113,3 +112,19 @@ class AmountOfIngredients(Model):
 
     def __str__(self):
         return f'{self.ingredient.title}: {self.amount} {self.ingredient.unit}'
+
+
+class Favorite(Model):
+    user = ForeignKey(User,
+                      on_delete=CASCADE,
+                      related_name='favorites', )
+    recipe = ForeignKey(Recipe,
+                        on_delete=CASCADE,
+                        related_name='favorites', )
+
+    class Meta:
+        verbose_name = 'избранное'
+        unique_together = ['user', 'recipe']
+
+    def __str__(self):
+        return f'{self.user}-{self.recipe}'
