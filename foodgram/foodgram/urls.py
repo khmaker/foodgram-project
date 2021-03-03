@@ -9,9 +9,9 @@ handler404 = 'foodgram.views.page_not_found'  # noqa
 handler500 = 'foodgram.views.server_error'  # noqa
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', include('users.urls')),
     path('', include('recipes.urls')),
-    path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:

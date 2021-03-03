@@ -7,7 +7,7 @@ from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv('../env/develop.env')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -110,3 +110,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'users.User'

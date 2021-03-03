@@ -1,0 +1,37 @@
+{% load static %}
+{% load recipe_filters %}
+{% csrf_token %}
+<div class="card" data-id="{{ recipe.id }}">
+    {% load thumbnail %}
+    {% thumbnail recipe.image "361x240" crop="center" upscale=True as im %}
+    <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}" alt="{{ recipe.title }}" class="card__image"></a>
+    {% endthumbnail %}
+    <div class="card__body">
+        <a class="card__title link" href="{{ recipe.get_absolute_url }}" target="_blank">{{ recipe.title }}</a>
+        <ul class="card__items">
+            {% for tag in recipe.tags.all %}
+            <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
+            {% endfor %}
+        </ul>
+        <div class="card__items card__items_column">
+            <p class="card__text"><span class="icon-time"></span> {{ recipe.duration }} мин.</p>
+            <p class="card__text"><span class="icon-user"></span> <a href="{% url 'author' recipe.author.username %}" style="color: black">{{ recipe.author }}</a></p>
+        </div>
+    </div>
+    <div class="card__footer">
+
+        {% if recipe.id|in_purchases:request.session %}
+            <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span> Рецепт добавлен</button>
+        {% else %}
+            <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+        {% endif %}
+        {% if user.is_authenticated and user != recipe.author %}
+            {% if recipe.id|is_favorite:user %}
+                <button class="button button_style_none" name="favorites"><span class="icon-favorite icon-favorite_active"></span></button>
+            {% else %}
+                <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
+            {% endif %}
+        {% endif %}
+
+    </div>
+</div>

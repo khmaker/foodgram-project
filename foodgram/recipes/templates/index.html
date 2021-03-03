@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Рецепты{% endblock %}
+{% load static  %}
+{% block stylesheet %}<link rel="stylesheet" href="{% static 'pages/index.css' %}">{% endblock %}
+{% block content %}
+    {% load user_filters %}
+    <main class="main container">
+        <div class="main__header">
+            <h1 class="main__title">{% if view.author %}{{ view.author }}{% elif favorites %}Избранное{% else %}Рецепты{% endif %}</h1>
+            {% include "includes/tags.html" %}
+        </div>
+        {% if view.author and user.is_authenticated %}
+        <div class="author-subscribe" data-author="{{ view.author.id }}">
+            {% csrf_token %}
+            {% if view.author.id|is_followed:user %}
+            <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться от автора</button></p>
+            {% else %}
+            <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% include 'includes/card_list.html' %}
+    </main>
+{% endblock content %}
+
+{% block js-scripts %}
+{% load static %}
+    {% if user.is_authenticated %}
+        <script src="{% static 'js/components/Favorites.js' %}"></script>
+        {% if not view.author %}
+            <script src="{% static 'indexAuth.js' %}"></script>
+        {% endif %}
+    {% else %}
+        <script src="{% static 'indexNotAuth.js' %}"></script>
+    {% endif %}
+
+    {% if view.author %}
+        <script src="{% static 'js/components/AuthorRecipe.js' %}"></script>
+        <script src="{% static 'js/components/Subscribe.js' %}"></script>
+        <script src="{% static 'authorRecipe.js' %}"></script>
+    {% endif %}
+{% endblock js-scripts %}

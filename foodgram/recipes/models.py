@@ -1,11 +1,10 @@
-from django.contrib.auth import get_user_model
 from django.db.models import (Model, ForeignKey, CharField, SlugField,
                               ImageField, TextField, ManyToManyField,
                               PositiveSmallIntegerField, DateTimeField,
-                              CASCADE
+                              TextChoices, CASCADE,
                               )
 
-User = get_user_model()
+from users.models import User
 
 
 class Follow(Model):
@@ -38,10 +37,18 @@ class Ingredient(Model):
 
 
 class Tag(Model):
+
+    class Color(TextChoices):
+        green = 'green'
+        orange = 'orange'
+        purple = 'purple'
+
     title = CharField(max_length=100,
                       verbose_name='имя тега', )
     slug = SlugField(null=False, unique=True)
-    color = CharField(max_length=100)
+    color = CharField(max_length=30,
+                      choices=Color.choices,
+                      default=Color.green)
 
     class Meta:
         verbose_name = 'тег'
@@ -56,29 +63,26 @@ class Recipe(Model):
                         on_delete=CASCADE,
                         related_name='author',
                         verbose_name='автор', )
-    name = CharField(max_length=200,
-                     blank=False,
-                     verbose_name='название', )
+    title = CharField(max_length=200,
+                      blank=False,
+                      verbose_name='название', )
     image = ImageField(upload_to='recipe_pics/',
                        blank=True,
                        null=True,
                        help_text='Здесь можно загрузить картинку',
-                       verbose_name='картинка',)
+                       verbose_name='картинка', )
     description = TextField(verbose_name='текстовое описание', )
     ingredients = ManyToManyField(Ingredient,
                                   through='AmountOfIngredients',
                                   related_name='recipe_ingredient',
                                   verbose_name='ингредиенты', )
-
     tags = ManyToManyField(Tag,
                            related_name='tags',
                            verbose_name='тег', )
     cook_time = PositiveSmallIntegerField(verbose_name='время приготовления', )
-
     pub_date = DateTimeField(auto_now_add=True,
                              db_index=True,
                              verbose_name='дата публикации', )
-
     slug = SlugField(max_length=100,
                      unique=True,
                      default=None,
@@ -86,12 +90,12 @@ class Recipe(Model):
                      verbose_name='уникальная часть URL для рецепта', )
 
     class Meta:
-        ordering = ('-pub_date', 'name',)
+        ordering = ('-pub_date', 'title',)
         verbose_name = 'рецепт'
         verbose_name_plural = 'рецепты'
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class AmountOfIngredients(Model):
@@ -102,3 +106,10 @@ class AmountOfIngredients(Model):
     ingredient = ForeignKey(Ingredient,
                             on_delete=CASCADE,
                             related_name='amount', )
+
+    class Meta:
+        verbose_name = 'количество ингридиентов'
+        unique_together = ['recipe', 'ingredient']
+
+    def __str__(self):
+        return f'{self.ingredient.title}: {self.amount} {self.ingredient.unit}'
