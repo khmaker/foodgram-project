@@ -2,6 +2,9 @@ from django.db.models import (Model, ForeignKey, CharField, SlugField,
                               ImageField, TextField, ManyToManyField,
                               PositiveSmallIntegerField, DateTimeField,
                               TextChoices, CASCADE, )
+from django.dispatch import receiver
+from django.db.models.signals import post_delete
+
 from django.urls import reverse
 
 from users.models import User
@@ -104,6 +107,11 @@ class Recipe(Model):
                            kwargs={'slug': self.slug})
         return reverse('recipe_by_id',
                        kwargs={'pk': self.id})
+
+
+@receiver(post_delete, sender=Recipe)
+def submission_delete(sender, instance, **kwargs):
+    instance.image.delete(False)
 
 
 class AmountOfIngredients(Model):
