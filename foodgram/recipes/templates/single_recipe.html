@@ -15,7 +15,7 @@
             <div class="single-card__header-info">
                 <h1 class="single-card__title">{{ recipe.title }}</h1>
                 <div class="single-card__favorite">
-                    <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
+                    <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big" style="margin-right: 70px"></span></button>
                     <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
                 </div>
             </div>
@@ -53,6 +53,7 @@
         </div>
     </div>
 </main>
+{% endblock %}
 {#<script src="{% static 'js/components/Purchases.js' %}"></script>#}
 {#<script src="{% static 'js/components/Favorites.js' %}"></script>#}
 {#<script src="{% static 'js/components/Subscribe.js' %}"></script>#}
@@ -64,4 +65,3 @@
 {##}
 {#<script src="{% static 'js/api/Api.js' %}"></script>#}
 {#<script src="{% static 'singlePage.js' %}"></script>#}
-{% endblock %}

@@ -24,8 +24,6 @@
     </main>
 {% endblock content %}
 
-{% block js-scripts %}
-{% load static %}
     {% if user.is_authenticated %}
         <script src="{% static 'js/components/Favorites.js' %}"></script>
         {% if not view.author %}
@@ -40,4 +38,3 @@
         <script src="{% static 'js/components/Subscribe.js' %}"></script>
         <script src="{% static 'authorRecipe.js' %}"></script>
     {% endif %}
-{% endblock js-scripts %}

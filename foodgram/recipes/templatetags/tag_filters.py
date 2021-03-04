@@ -19,8 +19,6 @@ def get_filter_link(request, tag):
 
 
 @register.filter
-def get_tags(get_params):
-    tags = get_params.getlist("tags")
-    if tags:
-        result = "tags=" + "&tags=".join(tags)
-        return result
+def get_tags_for_pagination(request):
+    tags = request.GET.getlist('tags')
+    return '&tags=' + '&tags='.join(tags) if tags else ''

@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
-from django.views.generic.base import ContextMixin
 
 from .models import Recipe, Tag
 from users.models import User
@@ -23,12 +22,13 @@ class RecipeListView(ListView):
                 if tags_to_show else queryset)
 
 
-class AuthorListView(RecipeListView, ContextMixin):
+class AuthorListView(RecipeListView):
 
     def get_queryset(self):
+        queryset = super().get_queryset()
         self.author = get_object_or_404(User,
                                         username=self.kwargs.get('username'))
-        queryset = self.model.objects.filter(author=self.author)
+        queryset = queryset.filter(author=self.author)
         return queryset
 
 
