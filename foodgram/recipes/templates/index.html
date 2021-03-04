@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Рецепты{% endblock %}
-{% load static  %}
+{% load static %}
 {% block stylesheet %}<link rel="stylesheet" href="{% static 'pages/index.css' %}">{% endblock %}
 {% block content %}
     {% load user_filters %}
@@ -9,8 +9,8 @@
             <h1 class="main__title">{% if view.author %}{{ view.author }}{% elif favorites %}Избранное{% else %}Рецепты{% endif %}</h1>
             {% include "includes/tags.html" %}
         </div>
-        {% if view.author and user.is_authenticated %}
-        <div class="author-subscribe" data-author="{{ view.author.id }}">
+        {% if user.is_authenticated and view.author and user != view.author %}
+        <div class="author-subscribe" data-author="{{ author.id }}">
             {% csrf_token %}
             {% if view.author.id|is_followed:user %}
             <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться от автора</button></p>

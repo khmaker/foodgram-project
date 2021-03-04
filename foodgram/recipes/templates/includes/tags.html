@@ -1,7 +1,8 @@
 {% load static %}
 {% load tag_filters %}
 {% with tags_in_request=request|get_tags_from_request %}
-<ul class="tags">
+<ul class="tags" style="margin-left: 24px">
+<div style="display: flex; flex-wrap: wrap; gap: 12px;">
     {% for tag in view.tags %}
         <li class="tags__item">
             <a id="{{ tag.slug }}" class="tags__checkbox tags__checkbox_style_{{ tag.color }}
@@ -9,5 +10,7 @@
             <span class="tags__label">{{ tag.title }}</span>
         </li>
     {% endfor %}
+</div>
+
 </ul>
 {% endwith %}

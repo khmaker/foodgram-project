@@ -1,71 +1,67 @@
 {% extends 'base.html' %}
 {% block title %}{{ recipe.title }}{% endblock %}
-{% block stylesheet %}<link rel="stylesheet" href="{% url 'pages/single.css' %}">{% endblock %}
-<body class="body">
-{% include 'includes/navigation.html' %}
+{% load static %}
+{% block stylesheet %}<link rel="stylesheet" href="{% static 'pages/single.css' %}">{% endblock %}
 {% block content %}
-    <main class="main container">
-        <div class="single-card" data-id="{{ recipe.id }}" {% if user.is_authenticated %}data-author="{{ recipe.author.id }}"{% endif %}>
-        {% load thumbnail %}
-        {% thumbnail recipe.image "480x480" crop="center" upscale=True as im %}
-            <img src="{{ im.url }}" alt="какой-то текст" class="single-card__image">
-        {% endthumbnail %}
+<main class="main container">
+    <div class="single-card" data-id="{{ recipe.id }}" {% if user.is_authenticated %}data-author="{{ recipe.author.id }}"{% endif %}>
+    {% load thumbnail %}
+    {% thumbnail recipe.image "480x480" crop="center" upscale=True as im %}
+        <img src="{{ im.url }}" alt="какой-то текст" class="single-card__image">
+    {% endthumbnail %}
 
-        {% csrf_token %}
-            <div class="single-card__info">
-                <div class="single-card__header-info">
-                    <h1 class="single-card__title">Французские тосты</h1>
-                    <div class="single-card__favorite">
-                        <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
-                        <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
-                    </div>
-                </div>
-                <ul class="single-card__items">
-                    <li class="single-card__item"><span class="badge badge_style_green">Обед</span></li>
-                    <li class="single-card__item"><span class="badge badge_style_orange">Завтрак</span></li>
-                    <li class="single-card__item"><span class="badge badge_style_purple">Ужин</span></li>
-                </ul>
-                <div class="single-card__items single-card__items_column">
-                    <p class="single-card__text"><span class="icon-time"></span> 20 мин.</p>
-                    <ul class="single-card__items">
-                        <li class="single-card__item"><p class="single-card__text"><span class="icon-user"></span> Вероника Чернова</p></li>
-                        <li class="single-card__item">  <a style="margin-left: 2.5em" href="#" class="single-card__text">Редактировать рецепт</a></li>
-                    </ul>
-                </div>
-                <ul class="single-card__items">
-                    <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
-                    <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
-                </ul>
-                <div class="single-card__section">
-                    <h3 class="single-card__section-title">Ингридиенты:</h3>
-                    <div class="single-card__items single-card__items_column">
-                        <p class=" single-card__section-item">Яйцо - 2 шт.</p>
-                        <p class=" single-card__section-item">Молоко - 200 мл.</p>
-                        <p class=" single-card__section-item">Тосты - 4 шт.</p>
-                        <p class=" single-card__section-item">Сахар 2 сл.л.</p>
-                        <p class=" single-card__section-item">Яйцо - 2 шт.</p>
-                        <p class=" single-card__section-item">Молоко - 200 мл.</p>
-                    </div>
-                </div>
-                <div class="single-card__section">
-                    <h3 class="single-card__section-title">Описание:</h3>
-                    <p class=" single-card__section-text">Смешать молоко с сахаром, добавить яйца, тщательно все взбить.
-                        Обмакнуть тосты в смесь и жарить на сливочном масле до золотистой корочки.</p>
-                    <p class=" single-card__section-text">Полить сверху сиропом топинамбура и украсить ягодами.</p>
+    {% csrf_token %}
+        <div class="single-card__info">
+            <div class="single-card__header-info">
+                <h1 class="single-card__title">{{ recipe.title }}</h1>
+                <div class="single-card__favorite">
+                    <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
+                    <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
                 </div>
             </div>
+            <ul class="single-card__items">
+                {% for tag in recipe.tags.all %}
+                <li class="single-card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
+                {% endfor %}
+            </ul>
+            <div class="single-card__items single-card__items_column">
+                <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.</p>
+                <ul class="single-card__items">
+                    <li class="single-card__item"><p class="single-card__text"><span class="icon-user"></span> {{ recipe.author }}</p></li>
+                    {% if recipe.author == user %}
+                    <li class="single-card__item">  <a style="margin-left: 2.5em" href="./edit" class="single-card__text">Редактировать рецепт</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <ul class="single-card__items">
+                <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
+                <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
+            </ul>
+            <div class="single-card__section">
+                <h3 class="single-card__section-title">Ингридиенты:</h3>
+                <div class="single-card__items single-card__items_column">
+                    {% for ingredient in recipe.recipeingredient_set.all %}
+                    <p class=" single-card__section-item">{{ ingredient.ingredient.title }} - {{ ingredient.amount }} {{ ingredient.ingredient.unit }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="single-card__section">
+                <h3 class="single-card__section-title">Описание:</h3>
+                <div class="single-card__section-text">{{ recipe.description|linebreaks}}</div>
+
+            </div>
         </div>
-    </main>
-{% include 'includes/footer.html' %}
-<script src="{% url 'js/components/Purchases.js' %}"></script>
-<script src="{% url 'js/components/Favorites.js' %}"></script>
-<script src="{% url 'js/components/Subscribe.js' %}"></script>
-<script src="{% url 'js/config/config.js' %}"></script>
-
-<script src="{% url 'js/components/MainCards.js' %}"></script>
-<script src="{% url 'js/components/SingleCard.js' %}"></script>
-<script src="{% url 'js/components/Header.js' %}"></script>
-
-<script src="{% url 'js/api/Api.js' %}"></script>
-<script src="{% url 'singlePage.js' %}"></script>
+    </div>
+</main>
+{#<script src="{% static 'js/components/Purchases.js' %}"></script>#}
+{#<script src="{% static 'js/components/Favorites.js' %}"></script>#}
+{#<script src="{% static 'js/components/Subscribe.js' %}"></script>#}
+{#<script src="{% static 'js/config/config.js' %}"></script>#}
+{##}
+{#<script src="{% static 'js/components/MainCards.js' %}"></script>#}
+{#<script src="{% static 'js/components/SingleCard.js' %}"></script>#}
+{#<script src="{% static 'js/components/Header.js' %}"></script>#}
+{##}
+{#<script src="{% static 'js/api/Api.js' %}"></script>#}
+{#<script src="{% static 'singlePage.js' %}"></script>#}
 {% endblock %}

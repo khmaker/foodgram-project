@@ -2,6 +2,7 @@ from django.db.models import (Model, ForeignKey, CharField, SlugField,
                               ImageField, TextField, ManyToManyField,
                               PositiveSmallIntegerField, DateTimeField,
                               TextChoices, CASCADE, )
+from django.urls import reverse
 
 from users.models import User
 
@@ -95,6 +96,14 @@ class Recipe(Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        slug = self.slug
+        if slug is not None:
+            return reverse('recipe_by_slug',
+                           kwargs={'slug': self.slug})
+        return reverse('recipe_by_id',
+                       kwargs={'pk': self.id})
 
 
 class AmountOfIngredients(Model):

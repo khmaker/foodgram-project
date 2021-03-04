@@ -7,11 +7,13 @@
     <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}" alt="{{ recipe.title }}" class="card__image"></a>
     {% endthumbnail %}
     <div class="card__body">
-        <a class="card__title link" href="{{ recipe.get_absolute_url }}" target="_blank">{{ recipe.title }}</a>
+        <a class="card__title link" href="{{ recipe.get_absolute_url }}" target="_blank" >{{ recipe.title }}</a>
         <ul class="card__items">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px;">
             {% for tag in recipe.tags.all %}
-            <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
+            <li class="card__item" style="margin-right: 0;"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
             {% endfor %}
+        </div>
         </ul>
         <div class="card__items card__items_column">
             <p class="card__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.</p>

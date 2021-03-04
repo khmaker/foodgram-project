@@ -1,15 +1,20 @@
-from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+from django.views.generic.base import ContextMixin
 
 from .models import Recipe, Tag
+from users.models import User
 
 
 class RecipeListView(ListView):
     template_name = 'index.html'
     model = Recipe
     paginate_by = 6
-    tags = Tag.objects.all()
+
+    def __init__(self, **kwargs):
+        self.author = None
+        self.tags = Tag.objects.all()
+        super().__init__(**kwargs)
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -18,10 +23,15 @@ class RecipeListView(ListView):
                 if tags_to_show else queryset)
 
 
-class AuthorListView(RecipeListView):
+class AuthorListView(RecipeListView, ContextMixin):
 
     def get_queryset(self):
-        author = get_object_or_404(get_user_model(),
-                                   username=self.kwargs['username'])
-        self.queryset = self.model.objects.filter(author=author)
-        return super().get_queryset()
+        self.author = get_object_or_404(User,
+                                        username=self.kwargs.get('username'))
+        queryset = self.model.objects.filter(author=self.author)
+        return queryset
+
+
+class RecipeView(DetailView):
+    model = Recipe
+    template_name = 'single_recipe.html'
