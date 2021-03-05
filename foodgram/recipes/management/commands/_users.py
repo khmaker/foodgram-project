@@ -1,14 +1,13 @@
-from ._text_generator import TextLorem
+import names
 
 from users.models import User
 
 
 def add_users():
     create = User.objects.get_or_create
-    name_generator = TextLorem(wsep='_', send='', srange=(1, 2))
     for i in range(1, 10):
         try:
-            name = name_generator.sentence()
+            name = names.get_full_name()
             user, created = create(username=name)
             if created:
                 user.save()
