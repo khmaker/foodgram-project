@@ -1,7 +1,14 @@
+import json
+
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
+# from django.views.generic.base import View
 
-from .models import Recipe, Tag
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+from .models import Recipe, Tag, Follow
 from users.models import User
 
 
@@ -35,3 +42,45 @@ class AuthorListView(RecipeListView):
 class RecipeView(DetailView):
     model = Recipe
     template_name = 'single_recipe.html'
+
+
+class FollowListView(LoginRequiredMixin, ListView):
+    template_name = 'follow.html'
+    paginate_by = 3
+
+    def get_queryset(self):
+        queryset = User.objects.filter(following__user=self.request.user)
+        return queryset
+
+    def post(self, request):
+        r = json.loads(request.body)
+        author_id = r.get('id')
+        if author_id is not None:
+            author = get_object_or_404(User, id=author_id)
+            obj, created = Follow.objects.get_or_create(user=request.user,
+                                                        author=author, )
+            return JsonResponse({'success': created})
+        return JsonResponse({'success': False}, status=400)
+
+    def delete(self, request, author_id):
+        author = get_object_or_404(Follow, user=request.user, author=author_id)
+        author.delete()
+        success = not request.user.follower.filter(author=author_id).exists()
+        return JsonResponse({'success': success})
+
+#
+# class Subscribe(LoginRequiredMixin, View):
+#
+#     def post(self, request, **kwargs):
+#         author = get_object_or_404(User,
+#                                    id=self.kwargs.get('author_id'))
+#         if request.user != author:
+#             Follow.objects.get_or_create(user=request.user, author=author)
+#         return JsonResponse({'success': True})
+#
+#     def delete(self, request, **kwargs):
+#         author = get_object_or_404(User,
+#                                    id=self.kwargs.get('author_id'))
+#         if request.user != author:
+#             Follow.objects.filter(user=request.user, author=author).delete()
+#         return JsonResponse({'success': True})

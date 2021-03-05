@@ -64,7 +64,7 @@ class Tag(Model):
 class Recipe(Model):
     author = ForeignKey(User,
                         on_delete=CASCADE,
-                        related_name='author',
+                        related_name='recipes',
                         verbose_name='автор', )
     title = CharField(max_length=200,
                       blank=False,
