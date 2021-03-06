@@ -24,9 +24,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api'
     'users',
     'recipes',
-    'sorl.thumbnail'
+    'sorl.thumbnail',
+    'rest_framework',
 
 ]
 
@@ -76,19 +78,19 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation'
-        '.UserAttributeSimilarityValidator',
+                '.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
-        '.MinimumLengthValidator',
+                '.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
-        '.CommonPasswordValidator',
+                '.CommonPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
-        '.NumericPasswordValidator',
+                '.NumericPasswordValidator',
     },
 ]
 
@@ -103,8 +105,11 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = (path.join('static'),)
+
+if DEBUG:
+    STATICFILES_DIRS = (path.join('static'),)
+else:
+    STATIC_ROOT = path.join(BASE_DIR, 'static')
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -113,3 +118,12 @@ LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'users.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
