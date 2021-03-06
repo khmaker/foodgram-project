@@ -1,0 +1,24 @@
+{% if page_obj.has_other_pages %}
+{% load tag_filters %}
+{% load pagination_filters %}
+
+<nav class="pagination" aria-label="Search results pages">
+    <ul class="pagination__container" style="flex-wrap: wrap; padding: 0 50px 50px; row-gap: 20px">
+        {% if page_obj.has_previous %}
+            <li class="pagination__item"><a class="pagination__link link" href="?page=1{{ request|get_tags_for_pagination }}"><span class="icon-left" style="background-repeat: no-repeat"></span><span class="icon-left" style="background-repeat: no-repeat"></span></a></li>
+            <li class="pagination__item"><a class="pagination__link link" href="?page={{ page_obj.previous_page_number }}{{ request|get_tags_for_pagination }}"><span class="icon-left" style="background-repeat: no-repeat"></span></a></li>
+        {% endif %}
+        {% for i in page_obj.number|page_window:page_obj.paginator.num_pages %}
+            {% if page_obj.number == i %}
+            <li class="pagination__item pagination__item_active"><a class="pagination__link link" href="?page={{ i }}{{ request|get_tags_for_pagination }}">{{ i }}</a></li>
+            {% else %}
+            <li class="pagination__item"><a class="pagination__link link" href="?page={{ i }}{{ request|get_tags_for_pagination }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li class="pagination__item"><a class="pagination__link link" href="?page={{ page_obj.next_page_number }}{{ request|get_tags_for_pagination }}"><span class="icon-right" style="background-repeat: no-repeat"></span></a></li>
+            <li class="pagination__item"><a class="pagination__link link" href="?page={{ paginator.num_pages }}{{ request|get_tags_for_pagination }}"><span class="icon-right" style="background-repeat: no-repeat"></span><span class="icon-right" style="background-repeat: no-repeat"></span></a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

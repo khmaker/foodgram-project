@@ -1,32 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Рецепты</title>
-    <link rel="stylesheet" href="./pages/index.css">
-</head>
 <body class="body">
-  <header class="header">
-      <nav class="nav">
-          <div class="nav__container container">
-              <ul class="nav__items list">
-                  <li class="nav__item nav__item_active"><a href="#" class="nav__link link">Рецепты</a></li>
-                  <li class="nav__item"><a href="#" class="nav__link link">Мои подписки</a></li>
-                  <li class="nav__item"><a href="#" class="nav__link link">Создать рецепт</a></li>
-                  <li class="nav__item"><a href="#" class="nav__link link">Избранное</a></li>
-                  <li class="nav__item"><a href="#" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">4</span></li>
-
-              </ul>
-              <ul class="nav__items list">
-                  <li class="nav__item"><a href="#" class="nav__link link">Изменить пароль</a></li>
-                  <li class="nav__item"><a href="#" class="nav__link link">Выход</a></li>
-              </ul>
-          </div>
-      </nav>
-  </header>
     <main class="main container">
         <div class="main__header">
             <h1 class="main__title">Рецепты</h1>
@@ -164,8 +136,7 @@
         </div>
     </footer>
   <script src="./js/components/MainCards.js"></script>
-{% load static %}
-  <script src="{% static 'js/components/Purchases.js' %}"></script>
+  <script src="./js/components/Purchases.js"></script>
   <script src="./js/components/Favorites.js"></script>
 
   <script src="./js/config/config.js"></script>

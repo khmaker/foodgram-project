@@ -7,7 +7,7 @@ from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv('../env/develop.env')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,14 +18,16 @@ DEBUG = True
 ALLOWED_HOSTS = env.get('ALLOWED_HOSTS', default='localhost 127.0.0.1').split()
 
 INSTALLED_APPS = [
-    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
+    'recipes',
     'sorl.thumbnail'
+
 ]
 
 MIDDLEWARE = [
@@ -109,3 +111,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'users.User'

@@ -1,0 +1,7 @@
+<div class="card-list">
+
+    {% for recipe in page_obj %}
+    {% include 'includes/recipe_card.html' with recipe=recipe %}
+    {% endfor %}
+
+</div>
