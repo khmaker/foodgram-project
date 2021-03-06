@@ -3,7 +3,6 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
-# from django.views.generic.base import View
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -67,20 +66,3 @@ class FollowListView(LoginRequiredMixin, ListView):
         author.delete()
         success = not request.user.follower.filter(author=author_id).exists()
         return JsonResponse({'success': success})
-
-#
-# class Subscribe(LoginRequiredMixin, View):
-#
-#     def post(self, request, **kwargs):
-#         author = get_object_or_404(User,
-#                                    id=self.kwargs.get('author_id'))
-#         if request.user != author:
-#             Follow.objects.get_or_create(user=request.user, author=author)
-#         return JsonResponse({'success': True})
-#
-#     def delete(self, request, **kwargs):
-#         author = get_object_or_404(User,
-#                                    id=self.kwargs.get('author_id'))
-#         if request.user != author:
-#             Follow.objects.filter(user=request.user, author=author).delete()
-#         return JsonResponse({'success': True})
