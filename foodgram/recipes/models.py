@@ -80,7 +80,7 @@ class Recipe(Model):
                                   related_name='recipe_ingredient',
                                   verbose_name='ингредиенты', )
     tags = ManyToManyField(Tag,
-                           related_name='tags',
+                           related_name='recipes',
                            verbose_name='тег', )
     cook_time = PositiveSmallIntegerField(verbose_name='время приготовления', )
     pub_date = DateTimeField(auto_now_add=True,
@@ -124,7 +124,7 @@ class AmountOfIngredients(Model):
                             related_name='amount', )
 
     class Meta:
-        verbose_name = 'количество ингридиентов'
+        verbose_name = 'количество ингредиентов'
         unique_together = ['recipe', 'ingredient']
 
     def __str__(self):
@@ -145,3 +145,19 @@ class Favorite(Model):
 
     def __str__(self):
         return f'{self.user}-{self.recipe}'
+
+
+class Purchase(Model):
+    user = ForeignKey(User,
+                      on_delete=CASCADE,
+                      related_name='purchases',
+                      verbose_name='Пользователь', )
+    recipe = ForeignKey(Recipe,
+                        on_delete=CASCADE,
+                        related_name='purchases',
+                        verbose_name='рецепт в покупках', )
+
+    class Meta:
+        unique_together = ['user', 'recipe']
+        verbose_name = 'покупка'
+        verbose_name_plural = 'покупки'

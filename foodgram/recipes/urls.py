@@ -13,7 +13,8 @@ urlpatterns = [
          views.RecipeView.as_view(), name='recipe_by_id'),
     path('subscriptions/',
          views.FollowListView.as_view(), name='subscriptions'),
-    path('subscriptions/<int:author_id>',
-         views.FollowListView.as_view(),
-         name='subscription'),
+    path('favorites/',
+         views.FavoritesListView.as_view(), name='favorites'),
+    path('purchases/',
+         views.PurchasesListView.as_view(), name='purchases'),
 ]
