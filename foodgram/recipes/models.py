@@ -68,20 +68,20 @@ class Recipe(Model):
                         verbose_name='автор', )
     title = CharField(max_length=200,
                       blank=False,
-                      verbose_name='название', )
+                      verbose_name='название рецепта', )
     image = ImageField(upload_to='recipe_pics/',
                        blank=True,
                        null=True,
                        help_text='Здесь можно загрузить картинку',
-                       verbose_name='картинка', )
-    description = TextField(verbose_name='текстовое описание', )
+                       verbose_name='загрузить фото', )
+    description = TextField(verbose_name='описание', )
     ingredients = ManyToManyField(Ingredient,
                                   through='AmountOfIngredients',
                                   related_name='recipe_ingredient',
                                   verbose_name='ингредиенты', )
     tags = ManyToManyField(Tag,
                            related_name='recipes',
-                           verbose_name='тег', )
+                           verbose_name='теги', )
     cook_time = PositiveSmallIntegerField(verbose_name='время приготовления', )
     pub_date = DateTimeField(auto_now_add=True,
                              db_index=True,

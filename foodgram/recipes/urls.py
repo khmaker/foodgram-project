@@ -11,6 +11,8 @@ urlpatterns = [
          views.RecipeView.as_view(), name='recipe_by_slug'),
     path('recipe/id/<int:pk>/',
          views.RecipeView.as_view(), name='recipe_by_id'),
+    path('recipe/new/',
+         views.RecipeCreate.as_view(), name='new_recipe'),
     path('subscriptions/',
          views.FollowListView.as_view(), name='subscriptions'),
     path('favorites/',

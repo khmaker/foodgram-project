@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework.exceptions import ValidationError
 
-from recipes.models import Follow, Favorite, Purchase
+from recipes.models import Follow, Favorite, Purchase, Ingredient
 
 
 class AuthorSerializer(ModelSerializer):
@@ -37,3 +37,9 @@ class PurchaseSerializer(AuthorSerializer):
     class Meta:
         fields = ['recipe', ]
         model = Purchase
+
+
+class IngredientSerializer(ModelSerializer):
+    class Meta:
+        fields = ['title', 'unit']
+        model = Ingredient

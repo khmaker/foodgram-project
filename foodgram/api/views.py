@@ -1,10 +1,10 @@
-from rest_framework import mixins, viewsets, status
+from rest_framework import mixins, viewsets, status, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from recipes.models import Follow, Favorite
+from recipes.models import Follow, Favorite, Ingredient
 from .serializers import (FollowSerializer, FavoriteSerializer,
-                          PurchaseSerializer, )
+                          PurchaseSerializer, IngredientSerializer)
 
 
 class CreateDestroyViewSet(mixins.CreateModelMixin,
@@ -39,3 +39,10 @@ class PurchaseViewSet(CreateDestroyViewSet):
 
     def get_queryset(self):
         return self.request.user.purchases.all()
+
+
+class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('$title',)

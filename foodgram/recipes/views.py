@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-
 from .models import Recipe, Tag
+from .forms import RecipeForm
 from users.models import User
 
 
@@ -63,10 +63,20 @@ class FavoritesListView(LoginRequiredMixin, RecipeListView):
 
 
 class PurchasesListView(LoginRequiredMixin, RecipeListView):
-    template_name = 'shopList.html'
+    template_name = 'shop_list.html'
     context_object_name = 'purchases'
 
     def get_queryset(self):
         queryset = self.request.user.purchases.all()
         self.counter = queryset.count
         return queryset
+
+
+class RecipeCreate(LoginRequiredMixin, CreateView):
+
+    form_class = RecipeForm
+    template_name = 'recipe_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
