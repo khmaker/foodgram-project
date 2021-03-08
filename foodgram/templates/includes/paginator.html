@@ -7,6 +7,9 @@
         {% if page_obj.has_previous %}
             <li class="pagination__item"><a class="pagination__link link" href="?page=1{{ request|get_tags_for_pagination }}"><span class="icon-left" style="background-repeat: no-repeat"></span><span class="icon-left" style="background-repeat: no-repeat"></span></a></li>
             <li class="pagination__item"><a class="pagination__link link" href="?page={{ page_obj.previous_page_number }}{{ request|get_tags_for_pagination }}"><span class="icon-left" style="background-repeat: no-repeat"></span></a></li>
+        {% else %}
+            <li class="pagination__item"><span class="icon-left" style="background-image: none"></span><span class="icon-left" style="background-image: none"></span></li>
+            <li class="pagination__item"><span class="icon-left" style="background-image: none"></span></li>
         {% endif %}
         {% for i in page_obj.number|page_window:page_obj.paginator.num_pages %}
             {% if page_obj.number == i %}
@@ -18,6 +21,9 @@
         {% if page_obj.has_next %}
             <li class="pagination__item"><a class="pagination__link link" href="?page={{ page_obj.next_page_number }}{{ request|get_tags_for_pagination }}"><span class="icon-right" style="background-repeat: no-repeat"></span></a></li>
             <li class="pagination__item"><a class="pagination__link link" href="?page={{ paginator.num_pages }}{{ request|get_tags_for_pagination }}"><span class="icon-right" style="background-repeat: no-repeat"></span><span class="icon-right" style="background-repeat: no-repeat"></span></a></li>
+        {% else %}
+            <li class="pagination__item"><span class="icon-right" style="background-image: none"></span></li>
+            <li class="pagination__item"><span class="icon-right" style="background-image: none"></span><span class="icon-right" style="background-image: none"></span></li>
         {% endif %}
     </ul>
 </nav>

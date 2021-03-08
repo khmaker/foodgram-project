@@ -1,5 +1,4 @@
 from django import forms
-from django.shortcuts import get_object_or_404
 
 from .models import Recipe, AmountOfIngredients, Ingredient
 
@@ -25,21 +24,28 @@ class RecipeForm(forms.ModelForm):
         return ingredients
 
     def save(self, commit=True):
-
         recipe = super().save(commit=False)
         recipe.save()
-
         objects = []
         for title, amount in self.ingredients.items():
-            ingredient = get_object_or_404(Ingredient, title=title)
-            objects.append(AmountOfIngredients(recipe=recipe,
-                                               ingredient=ingredient,
-                                               amount=int(amount), )
-                           )
-            AmountOfIngredients.objects.bulk_create(objects)
+            ingredient = Ingredient.objects.filter(title=title)
+            if ingredient.exists():
+                objects.append(AmountOfIngredients(recipe=recipe,
+                                                   ingredient=ingredient.get(),
+                                                   amount=int(amount), )
+                               )
 
+        recipe.amount.all().delete()
+        AmountOfIngredients.objects.bulk_create(objects)
         self.save_m2m()
         return recipe
+
+    def clean(self):
+        for title, amount in self.ingredients.items():
+            ingredient = Ingredient.objects.filter(title=title)
+            if not ingredient.exists():
+                raise forms.ValidationError(f'{title} not valid ingredient')
+        return super().clean()
 
     class Meta:
         model = Recipe
@@ -47,5 +53,5 @@ class RecipeForm(forms.ModelForm):
                   'image',
                   'description',
                   'tags',
-                  'cook_time',)
+                  'cook_time', )
         widgets = {'tags': forms.CheckboxSelectMultiple(), }

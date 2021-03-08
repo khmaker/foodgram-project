@@ -1,7 +1,10 @@
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView, CreateView
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
+                                  DeleteView,
+                                  )
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 from .models import Recipe, Tag
 from .forms import RecipeForm
@@ -15,15 +18,11 @@ class RecipeListView(ListView):
 
     def __init__(self, **kwargs):
         self.author = None
-        self.counter = None
         self.tags = Tag.objects.all()
         super().__init__(**kwargs)
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        user = self.request.user
-        if user.is_authenticated:
-            self.counter = user.purchases.all().count
         tags_to_show = self.request.GET.getlist('tags')
         self.tags = Tag.objects.filter(recipes__in=queryset).distinct()
         return (queryset.filter(tags__slug__in=tags_to_show).distinct()
@@ -68,7 +67,6 @@ class PurchasesListView(LoginRequiredMixin, RecipeListView):
 
     def get_queryset(self):
         queryset = self.request.user.purchases.all()
-        self.counter = queryset.count
         return queryset
 
 
@@ -80,3 +78,26 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
+class RecipeEditView(LoginRequiredMixin, UpdateView):
+
+    form_class = RecipeForm
+    model = Recipe
+    template_name = 'recipe_form.html'
+
+    def get(self, request, *args, **kwargs):
+        self.recipe = self.get_object()
+        if request.user != self.recipe.author:
+            return redirect(self.recipe.get_absolute_url())
+        return super().get(request, *args, **kwargs)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form=form)
+
+
+class RecipeDeleteView(LoginRequiredMixin, DeleteView):
+    model = Recipe
+    success_url = reverse_lazy('index')
+    template_name = 'recipe_confirm_delete.html'
+    pk_url_kwarg = 'pk'
