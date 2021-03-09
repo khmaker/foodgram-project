@@ -16,3 +16,4 @@ toml==0.10.2
 
 numpy==1.20.1
 names==0.3.0
+djangorestframework==3.12.2

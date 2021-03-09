@@ -4,15 +4,16 @@ register = template.Library()
 
 
 @register.filter
-def in_purchases(recipe_id, session):
-    recipes: list = session.get('shop_list')
-    return recipes and recipe_id in recipes
+def in_purchases(recipe_id, user):
+    if user.is_authenticated:
+        return user.purchases.filter(recipe=recipe_id).exists()
 
 
 @register.filter
 def is_favorite(recipe_id, user):
-    result = user.favorites.filter(recipe=recipe_id).exists()
-    return result
+    if user.is_authenticated:
+        result = user.favorites.filter(recipe=recipe_id).exists()
+        return result
 
 
 @register.filter

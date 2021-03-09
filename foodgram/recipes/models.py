@@ -21,6 +21,8 @@ class Follow(Model):
                         verbose_name='Подписки', )
 
     class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
         unique_together = ['user', 'author']
 
 
@@ -68,20 +70,20 @@ class Recipe(Model):
                         verbose_name='автор', )
     title = CharField(max_length=200,
                       blank=False,
-                      verbose_name='название', )
+                      verbose_name='название рецепта', )
     image = ImageField(upload_to='recipe_pics/',
                        blank=True,
                        null=True,
                        help_text='Здесь можно загрузить картинку',
-                       verbose_name='картинка', )
-    description = TextField(verbose_name='текстовое описание', )
+                       verbose_name='загрузить фото', )
+    description = TextField(verbose_name='описание', )
     ingredients = ManyToManyField(Ingredient,
                                   through='AmountOfIngredients',
                                   related_name='recipe_ingredient',
                                   verbose_name='ингредиенты', )
     tags = ManyToManyField(Tag,
-                           related_name='tags',
-                           verbose_name='тег', )
+                           related_name='recipes',
+                           verbose_name='теги', )
     cook_time = PositiveSmallIntegerField(verbose_name='время приготовления', )
     pub_date = DateTimeField(auto_now_add=True,
                              db_index=True,
@@ -93,7 +95,7 @@ class Recipe(Model):
                      verbose_name='уникальная часть URL для рецепта', )
 
     class Meta:
-        ordering = ('-pub_date', 'title',)
+        ordering = ['-pub_date', 'title', ]
         verbose_name = 'рецепт'
         verbose_name_plural = 'рецепты'
 
@@ -124,7 +126,7 @@ class AmountOfIngredients(Model):
                             related_name='amount', )
 
     class Meta:
-        verbose_name = 'количество ингридиентов'
+        verbose_name = 'количество ингредиентов'
         unique_together = ['recipe', 'ingredient']
 
     def __str__(self):
@@ -145,3 +147,19 @@ class Favorite(Model):
 
     def __str__(self):
         return f'{self.user}-{self.recipe}'
+
+
+class Purchase(Model):
+    user = ForeignKey(User,
+                      on_delete=CASCADE,
+                      related_name='purchases',
+                      verbose_name='пользователь', )
+    recipe = ForeignKey(Recipe,
+                        on_delete=CASCADE,
+                        related_name='purchases',
+                        verbose_name='рецепт в покупках', )
+
+    class Meta:
+        verbose_name = 'покупка'
+        verbose_name_plural = 'покупки'
+        unique_together = ['user', 'recipe']

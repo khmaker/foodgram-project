@@ -9,7 +9,7 @@ def get_tags_from_request(request):
 
 
 @register.filter
-def get_filter_link(request, tag):
+def get_tag_filter(request, tag):
     tags = request.GET.getlist('tags')
     if tag.slug in tags:
         tags.remove(tag.slug)

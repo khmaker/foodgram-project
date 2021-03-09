@@ -1,8 +1,15 @@
 import random
 
-WORDS = ('adipisci aliquam amet consectetur dolor dolore dolorem eius est et'
-         'incidunt ipsum labore magnam modi neque non numquam porro quaerat '
-         'qui quia quisquam sed sit tempora ut velit voluptatem').split()
+WORDS = (
+    'do', 'deserunt', 'proident', 'tempor', 'voluptate', 'dolor', 'pariatur',
+    'culpa', 'fugiat', 'ipsum', 'ullamco', 'ad', 'consequat', 'lorem', 'ut',
+    'nulla', 'sunt', 'mollit', 'nisi', 'reprehenderit', 'eu', 'commodo',
+    'occaecat', 'quis', 'excepteur', 'et', 'velit', 'id', 'cillum', 'nostrud',
+    'enim', 'ea', 'irure', 'aliquip', 'qui', 'consectetur', 'aute',
+    'cupidatat', 'laborum', 'labore', 'laboris', 'sed', 'in', 'sit', 'anim',
+    'eiusmod', 'veniam', 'adipiscing', 'duis', 'elit', 'dolore', 'est',
+    'minim', 'exercitation', 'magna', 'non', 'sint', 'incididunt', 'ex',
+    'officia', 'aliqua', 'esse', 'amet')
 
 
 class TextLorem:

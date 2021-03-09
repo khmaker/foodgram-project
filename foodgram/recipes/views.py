@@ -1,13 +1,13 @@
-import json
-
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
+                                  DeleteView,
+                                  )
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
-
-from .models import Recipe, Tag, Follow
+from .models import Recipe, Tag
+from .forms import RecipeForm
 from users.models import User
 
 
@@ -24,6 +24,7 @@ class RecipeListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         tags_to_show = self.request.GET.getlist('tags')
+        self.tags = Tag.objects.filter(recipes__in=queryset).distinct()
         return (queryset.filter(tags__slug__in=tags_to_show).distinct()
                 if tags_to_show else queryset)
 
@@ -34,6 +35,7 @@ class AuthorListView(RecipeListView):
         queryset = super().get_queryset()
         self.author = get_object_or_404(User,
                                         username=self.kwargs.get('username'))
+        self.tags = Tag.objects.filter(recipes__author=self.author).distinct()
         queryset = queryset.filter(author=self.author)
         return queryset
 
@@ -48,21 +50,54 @@ class FollowListView(LoginRequiredMixin, ListView):
     paginate_by = 3
 
     def get_queryset(self):
-        queryset = User.objects.filter(following__user=self.request.user)
+        return User.objects.filter(following__user=self.request.user)
+
+
+class FavoritesListView(LoginRequiredMixin, RecipeListView):
+
+    def get_queryset(self):
+        queryset = Recipe.objects.filter(favorites__user=self.request.user)
+        self.queryset = queryset
+        return super().get_queryset()
+
+
+class PurchasesListView(LoginRequiredMixin, RecipeListView):
+    template_name = 'shop_list.html'
+    context_object_name = 'purchases'
+
+    def get_queryset(self):
+        queryset = self.request.user.purchases.all()
         return queryset
 
-    def post(self, request):
-        r = json.loads(request.body)
-        author_id = r.get('id')
-        if author_id is not None:
-            author = get_object_or_404(User, id=author_id)
-            obj, created = Follow.objects.get_or_create(user=request.user,
-                                                        author=author, )
-            return JsonResponse({'success': created})
-        return JsonResponse({'success': False}, status=400)
 
-    def delete(self, request, author_id):
-        author = get_object_or_404(Follow, user=request.user, author=author_id)
-        author.delete()
-        success = not request.user.follower.filter(author=author_id).exists()
-        return JsonResponse({'success': success})
+class RecipeCreate(LoginRequiredMixin, CreateView):
+
+    form_class = RecipeForm
+    template_name = 'recipe_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class RecipeEditView(LoginRequiredMixin, UpdateView):
+
+    form_class = RecipeForm
+    model = Recipe
+    template_name = 'recipe_form.html'
+
+    def get(self, request, *args, **kwargs):
+        self.recipe = self.get_object()
+        if request.user != self.recipe.author:
+            return redirect(self.recipe.get_absolute_url())
+        return super().get(request, *args, **kwargs)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form=form)
+
+
+class RecipeDeleteView(LoginRequiredMixin, DeleteView):
+    model = Recipe
+    success_url = reverse_lazy('index')
+    template_name = 'recipe_confirm_delete.html'
+    pk_url_kwarg = 'pk'
