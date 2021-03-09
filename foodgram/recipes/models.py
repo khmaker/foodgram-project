@@ -21,6 +21,8 @@ class Follow(Model):
                         verbose_name='Подписки', )
 
     class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
         unique_together = ['user', 'author']
 
 
@@ -93,7 +95,7 @@ class Recipe(Model):
                      verbose_name='уникальная часть URL для рецепта', )
 
     class Meta:
-        ordering = ('-pub_date', 'title',)
+        ordering = ['-pub_date', 'title', ]
         verbose_name = 'рецепт'
         verbose_name_plural = 'рецепты'
 
@@ -151,13 +153,13 @@ class Purchase(Model):
     user = ForeignKey(User,
                       on_delete=CASCADE,
                       related_name='purchases',
-                      verbose_name='Пользователь', )
+                      verbose_name='пользователь', )
     recipe = ForeignKey(Recipe,
                         on_delete=CASCADE,
                         related_name='purchases',
                         verbose_name='рецепт в покупках', )
 
     class Meta:
-        unique_together = ['user', 'recipe']
         verbose_name = 'покупка'
         verbose_name_plural = 'покупки'
+        unique_together = ['user', 'recipe']

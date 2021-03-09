@@ -18,15 +18,15 @@ DEBUG = True
 ALLOWED_HOSTS = env.get('ALLOWED_HOSTS', default='localhost 127.0.0.1').split()
 
 INSTALLED_APPS = [
+    'api',
+    'users',
+    'recipes',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
-    'users',
-    'recipes',
     'sorl.thumbnail',
     'rest_framework',
 
