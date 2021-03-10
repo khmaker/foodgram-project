@@ -76,6 +76,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd app/
+            touch .env
             echo DEBUG='1' > .env
             echo SECRET_KEY='${{ secrets.SECRET_KEY }}' > .env
             echo ALLOWED_HOSTS='${{ secrets.ALLOWED_HOSTS }}' > .env
