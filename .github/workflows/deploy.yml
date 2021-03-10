@@ -71,7 +71,7 @@ jobs:
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         env:
-          DEBUG: 0  # change to 1 for Debug mode
+          DEBUG: 1  # change to 1 for Debug mode
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
           POSTGRES_DB: postgres
