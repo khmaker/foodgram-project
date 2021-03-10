@@ -64,6 +64,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
+          overwrite: true
           source: "./docker-compose.yaml, ./nginx"
           target: "./app/"
 
