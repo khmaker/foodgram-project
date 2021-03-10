@@ -54,8 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
     steps:
-      - uses: actions/checkout@master
-
+    
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
@@ -68,6 +67,9 @@ jobs:
           envkey_DB_HOST: localhost
           envkey_DB_PORT: 5432
           file_name: .env
+          
+      - uses: actions/checkout@master
+
 
       - name: copy docker-compose.yaml file to remote
         uses: appleboy/scp-action@master
