@@ -27,7 +27,7 @@ services:
     - media:/app/web/media
     - ./nginx:/etc/nginx/conf.d
     ports:
-    - '80:80'
+    - 80:80
     depends_on:
       - web
 
