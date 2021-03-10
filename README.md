@@ -1,5 +1,5 @@
 # foodgram-project
-![workflow badge](https://github.com/khmaker/foodgram-project/workflows/fuudgram/badge.svg)
+![workflow badge](https://github.com/khmaker/foodgram-project/workflows/foodgram/badge.svg)
 
 сайт «Продуктовый помощник».
 
