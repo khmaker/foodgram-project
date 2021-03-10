@@ -87,7 +87,7 @@ jobs:
           script: |
             cd app/
             docker-compose down
-            docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
+            docker pull khmaker/foodgram:latest
             docker-compose up -d
 
   send_message:
