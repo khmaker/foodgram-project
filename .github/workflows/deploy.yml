@@ -56,6 +56,19 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_DEBUG: 0  # change to 1 for Debug mode
+          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          envkey_ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+          envkey_POSTGRES_DB: postgres
+          envkey_POSTGRES_USER: postgres
+          envkey_POSTGRES_PASSWORD: postgres
+          envkey_DB_HOST: localhost
+          envkey_DB_PORT: 5432
+          file_name: .env
+
       - name: copy docker-compose.yaml file to remote
         uses: appleboy/scp-action@master
         with:
@@ -63,21 +76,8 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          source: "./docker-compose.yaml"
+          source: "./docker-compose.yaml, /.env, /nginx"
           target: "./app/"
-
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          DEBUG: 0  # change to 1 for Debug mode
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-          POSTGRES_DB: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          DB_HOST: localhost
-          DB_PORT: 5432
-          file_name: .env
 
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
