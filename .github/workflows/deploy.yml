@@ -84,7 +84,16 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
+          envs: ALLOWED_HOSTS,POSTGRES_DB,POSTGRES_USER,POSTGRES_PASSWORD,DB_HOST,DB_PORT
           script: |
+            export DEBUG=1
+            export SECRET_KEY=$SECRET_KEY
+            export ALLOWED_HOSTS=$ALLOWED_HOSTS
+            export POSTGRES_DB=$POSTGRES_DB
+            export POSTGRES_USER=$POSTGRES_USER
+            export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+            export DB_HOST=$DB_HOST
+            export DB_PORT=$DB_PORT
             cd app/
             docker-compose down
             docker pull khmaker/foodgram:latest
