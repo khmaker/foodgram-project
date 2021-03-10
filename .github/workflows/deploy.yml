@@ -55,10 +55,14 @@ jobs:
     needs: build_and_push_to_docker_hub
     steps:
     
+      - name: whereami
+        run: |
+          pwd
+          ls
+        
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
-          script: pwd
           envkey_DEBUG: 0  # change to 1 for Debug mode
           envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
           envkey_ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
@@ -68,6 +72,11 @@ jobs:
           envkey_DB_HOST: localhost
           envkey_DB_PORT: 5432
           file_name: .env
+          
+      - name: whereami
+        run: |
+          pwd
+          ls
           
       - uses: actions/checkout@master
 
