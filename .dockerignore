@@ -1,0 +1,12 @@
+*.md
+
+./.idea
+./.git
+
+./venv
+./tests
+
+Dockerfile
+docker-compose.yaml
+
+./nginx

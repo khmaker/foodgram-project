@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Технологии{% endblock %}
+{% load static %}
+{% block stylesheet %}<link rel="stylesheet" href="{% static 'pages/index.css' %}">{% endblock %}
+{% block content %}
+<main class="main container">
+
+    <div class="main__header">
+        <h1 class="main__title">Технологии</h1>
+    </div>
+
+    <div class="custom-center-block">
+        <div class="custom-text-block">
+            <style>
+               li {
+                list-style-type: none;
+               }
+               ul {
+                margin-left: 0;
+                padding-left: 0;
+               }
+            </style>
+            <ul>
+                <li><a href="https://python.org">Python</a></li>
+                <li><a href="https://djangoproject.com">Django</a></li>
+                <li><a href="https://www.django-rest-framework.org/">Django REST framework</a></li>
+                <li><a href="https://python-pillow.org/">Pillow</a></li>
+                <li><a href="https://github.com/jazzband/sorl-thumbnail">Thumbnails for Django</a></li>
+                <li><a href="https://postgresql.org">PostgreSQL</a></li>
+                <li><a href="https://docker.com">Docker</a></li>
+                <li><a href="https://gunicorn.org">Gunicorn</a></li>
+                <li><a href="https://nginx.org">NGINX</a></li>
+            </ul>
+        </div>
+
+        <div class="custom-button-block"  style="padding-top: 24px">
+            <a href=""><button class="button button_style_blue">Перейти на главную</button></a>
+        </div>
+
+    </div>
+
+</main>
+{% endblock %}

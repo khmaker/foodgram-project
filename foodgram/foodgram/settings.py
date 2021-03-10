@@ -7,13 +7,13 @@ from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
 
-load_dotenv('../env/develop.env')
+load_dotenv('../.env')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env.get('SECRET_KEY', default=get_random_secret_key())
 
-DEBUG = True
+DEBUG = bool(env.get('DEBUG', default=0))
 
 ALLOWED_HOSTS = env.get('ALLOWED_HOSTS', default='localhost 127.0.0.1').split()
 

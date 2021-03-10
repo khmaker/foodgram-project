@@ -40,3 +40,11 @@ def download_cart(request):
                             as_attachment=True)
     os.remove(temp.name)
     return response
+
+
+def about_author(request):
+    return render(request, 'misc/about.html')
+
+
+def about_tech(request):
+    return render(request, 'misc/tech.html')
