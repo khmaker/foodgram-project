@@ -68,9 +68,10 @@ jobs:
           envkey_POSTGRES_PASSWORD: postgres
           envkey_DB_HOST: localhost
           envkey_DB_PORT: 5432
+          directory: ${{ GITHUB_WORKSPACE }}
           
       - name: whereami
-        run: pwd && ls ../
+        run: pwd && ls ../ && ls
 
       - name: copy docker-compose.yaml file to remote
         uses: appleboy/scp-action@master
@@ -81,10 +82,6 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           source: "./docker-compose.yaml, ./.env, ./nginx"
           target: "./app/"
-          
-          
-      - name: whereami
-        run: pwd && ls ../
 
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
