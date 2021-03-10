@@ -5,6 +5,8 @@ services:
     image: postgres:12.0-alpine
     container_name: db
     restart: always
+    expose:
+      - 5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
@@ -29,7 +31,7 @@ services:
     - media:/app/web/media
     - ./nginx:/etc/nginx/conf.d
     ports:
-    - 8000:80
+    - 80:80
     depends_on:
       - web
 
