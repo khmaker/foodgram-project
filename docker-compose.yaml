@@ -9,7 +9,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
 
   web:
-    build: khmaker/foodgram:latest
+    image: khmaker/foodgram:latest
     container_name: web
     restart: always
     expose:
