@@ -86,8 +86,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             export DEBUG=1
-            export SECRET_KEY=${{ secrets.SECRET_KEY }}
-            export ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}
+            export SECRET_KEY='${{ secrets.SECRET_KEY }}'
+            export ALLOWED_HOSTS='${{ secrets.ALLOWED_HOSTS }}'
             export POSTGRES_DB=$POSTGRES_DB
             export POSTGRES_USER=$POSTGRES_USER
             export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
