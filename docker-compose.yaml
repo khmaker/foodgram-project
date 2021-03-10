@@ -17,16 +17,16 @@ services:
     depends_on:
       - db
     volumes:
-      - static:/home/app/web/static
-      - media:/home/app/web/media
+      - static:/app/web/static
+      - media:/app/web/media
 
   nginx:
     image: nginx:1.19-alpine
     container_name: nginx
     restart: always
     volumes:
-    - static:/home/app/web/static
-    - media:/home/app/web/media
+    - static:/app/web/static
+    - media:/app/web/media
     - ./nginx:/etc/nginx/conf.d
     ports:
     - 8000:80

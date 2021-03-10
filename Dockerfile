@@ -2,10 +2,10 @@
 FROM python:slim
 
 # create directory for the app user
-RUN mkdir -p /home/app
+RUN mkdir -p /app
 
 # create the appropriate directories
-ENV APP_HOME=/home/app/web
+ENV APP_HOME=/app/web
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt --no-cache-dir
 COPY ./foodgram/ $APP_HOME
 
 RUN python manage.py collectstatic --noinput
-CMD gunicorn api_yamdb.wsgi:application --bind 0.0.0.0:8000
+CMD gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
