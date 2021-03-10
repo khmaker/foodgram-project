@@ -70,7 +70,7 @@ jobs:
           envkey_DB_PORT: 5432
           
       - name: whereami
-        run: pwd && ls
+        run: pwd && ls ../
 
       - name: copy docker-compose.yaml file to remote
         uses: appleboy/scp-action@master
@@ -84,7 +84,7 @@ jobs:
           
           
       - name: whereami
-        run: pwd && ls
+        run: pwd && ls ../
 
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
