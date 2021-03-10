@@ -1,0 +1,107 @@
+name: foodgram
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        pip install -r requirements.txt --no-cache-dir
+    - name: Lint with flake8
+      run: flake8 . --exclude tests,**/migrations
+
+    - name: Test with pytest
+      run: pytest
+
+  build_and_push_to_docker_hub:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build_and_push_to_docker_hub
+    steps:
+      - uses: actions/checkout@master
+
+      - name: copy docker-compose.yaml file to remote
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          source: "./docker-compose.yaml"
+          target: "./app/"
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          DEBUG: 0  # change to 1 for Debug mode
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          DB_HOST: localhost
+          DB_PORT: 5432
+          file_name: .env
+
+      - name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+#          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd app/
+            docker-compose down
+            docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
+            docker-compose up -d
+
+  send_message:
+   runs-on: ubuntu-latest
+   needs: deploy
+   steps:
+     - name: send message
+       uses: appleboy/telegram-action@master
+       with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: ${{ github.workflow }} успешно выполнен!
