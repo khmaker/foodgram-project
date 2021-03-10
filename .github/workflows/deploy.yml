@@ -70,30 +70,20 @@ jobs:
 
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
-        env:
-          DEBUG: 1  # change to 1 for Debug mode
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-          POSTGRES_DB: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          DB_HOST: db
-          DB_PORT: 5432
-          
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            export DEBUG=1
-            export SECRET_KEY='${{ secrets.SECRET_KEY }}'
-            export ALLOWED_HOSTS='${{ secrets.ALLOWED_HOSTS }}'
-            export POSTGRES_DB=$POSTGRES_DB
-            export POSTGRES_USER=$POSTGRES_USER
-            export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-            export DB_HOST=$DB_HOST
-            export DB_PORT=$DB_PORT
             cd app/
+            echo DEBUG='1' > .env
+            echo SECRET_KEY='${{ secrets.SECRET_KEY }}' > .env
+            echo ALLOWED_HOSTS='${{ secrets.ALLOWED_HOSTS }}' > .env
+            echo POSTGRES_DB='postgres' > .env
+            echo POSTGRES_USER='postgres' > .env
+            echo POSTGRES_PASSWORD='postgres' > .env
+            echo DB_HOST='db' > .env
+            echo DB_PORT='5432' > .env
             docker-compose down
             docker pull khmaker/foodgram:latest
             docker-compose up -d
