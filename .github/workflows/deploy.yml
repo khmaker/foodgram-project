@@ -80,13 +80,14 @@ jobs:
             touch .env
             cat <<tmp >> .env
             DEBUG='0'
-            echo SECRET_KEY='${{ secrets.SECRET_KEY }}'
-            echo ALLOWED_HOSTS='${{ secrets.ALLOWED_HOSTS }}'
-            echo POSTGRES_DB='${{ secrets.POSTGRES_DB }}'
-            echo POSTGRES_USER='${{ secrets.POSTGRES_USER }}'
-            echo POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}'
-            echo DB_HOST='${{ secrets.DB_HOST }}'
-            echo DB_PORT='${{ secrets.DB_PORT }}'
+            SECRET_KEY='${{ secrets.SECRET_KEY }}'
+            ALLOWED_HOSTS='${{ secrets.ALLOWED_HOSTS }}'
+            POSTGRES_DB='${{ secrets.POSTGRES_DB }}'
+            POSTGRES_USER='${{ secrets.POSTGRES_USER }}'
+            POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}'
+            DB_HOST='${{ secrets.DB_HOST }}'
+            DB_PORT='${{ secrets.DB_PORT }}'
+            tmp
             docker-compose down
             docker pull khmaker/foodgram:latest
             docker-compose up -d
