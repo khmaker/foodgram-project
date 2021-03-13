@@ -1,17 +1,20 @@
-from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
-                                  DeleteView,
-                                  )
-
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from django.views.generic import DeleteView
+from django.views.generic import DetailView
+from django.views.generic import ListView
+from django.views.generic import UpdateView
 
-from .models import Recipe, Tag
-from .forms import RecipeForm
 from users.models import User
+from recipes.forms import RecipeForm
+from recipes.models import Recipe
+from recipes.models import Tag
 
 
-class RecipeListView(ListView):
+class BaseListView(ListView):
     template_name = 'index.html'
     model = Recipe
     paginate_by = 6
@@ -29,7 +32,13 @@ class RecipeListView(ListView):
                 if tags_to_show else queryset)
 
 
-class AuthorListView(RecipeListView):
+class RecipeListView(BaseListView):
+
+    def get_queryset(self):
+        return super().get_queryset()
+
+
+class AuthorListView(BaseListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -53,7 +62,7 @@ class FollowListView(LoginRequiredMixin, ListView):
         return User.objects.filter(following__user=self.request.user)
 
 
-class FavoritesListView(LoginRequiredMixin, RecipeListView):
+class FavoritesListView(LoginRequiredMixin, BaseListView):
 
     def get_queryset(self):
         queryset = Recipe.objects.filter(favorites__user=self.request.user)
@@ -61,7 +70,7 @@ class FavoritesListView(LoginRequiredMixin, RecipeListView):
         return super().get_queryset()
 
 
-class PurchasesListView(LoginRequiredMixin, RecipeListView):
+class PurchasesListView(LoginRequiredMixin, BaseListView):
     template_name = 'shop_list.html'
     context_object_name = 'purchases'
 
@@ -70,8 +79,7 @@ class PurchasesListView(LoginRequiredMixin, RecipeListView):
         return queryset
 
 
-class RecipeCreate(LoginRequiredMixin, CreateView):
-
+class RecipeCreateView(LoginRequiredMixin, CreateView):
     form_class = RecipeForm
     template_name = 'recipe_form.html'
 
@@ -81,7 +89,6 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
 
 
 class RecipeEditView(LoginRequiredMixin, UpdateView):
-
     form_class = RecipeForm
     model = Recipe
     template_name = 'recipe_form.html'

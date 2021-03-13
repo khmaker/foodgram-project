@@ -1,10 +1,17 @@
-from rest_framework import mixins, viewsets, status, filters
+from rest_framework import filters
+from rest_framework import mixins
+from rest_framework import status
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from recipes.models import Follow, Favorite, Ingredient
-from .serializers import (FollowSerializer, FavoriteSerializer,
-                          PurchaseSerializer, IngredientSerializer)
+from recipes.models import Favorite
+from recipes.models import Follow
+from recipes.models import Ingredient
+from api.serializers import FavoriteSerializer
+from api.serializers import FollowSerializer
+from api.serializers import IngredientSerializer
+from api.serializers import PurchaseSerializer
 
 
 class CreateDestroyViewSet(mixins.CreateModelMixin,
@@ -32,7 +39,6 @@ class FavoritesViewSet(CreateDestroyViewSet):
 
 
 class PurchaseViewSet(CreateDestroyViewSet):
-
     serializer_class = PurchaseSerializer
     permission_classes = (IsAuthenticated,)
     lookup_field = 'recipe'

@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import download_cart, about_author, about_tech
+from .views import download_cart
 
 
 handler404 = 'foodgram.views.page_not_found'  # noqa
@@ -15,10 +15,6 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('download_cart/',
          download_cart, name='download cart'),
-    path('about/author',
-         about_author, name='about author'),
-    path('about/tech',
-         about_tech, name='about tech'),
     path('', include('recipes.urls')),
 ]
 

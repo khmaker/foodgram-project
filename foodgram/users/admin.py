@@ -1,11 +1,11 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
-from .models import User
+from users.models import User
 
 
-class RecipeUserAdmin(UserAdmin):
+class UserAdmin(DjangoUserAdmin):
     list_filter = ('username', 'email')
 
 
-admin.site.register(User, RecipeUserAdmin)
+admin.site.register(User, UserAdmin)

@@ -1,10 +1,16 @@
-from django.db.models import (Model, ForeignKey, CharField, SlugField,
-                              ImageField, TextField, ManyToManyField,
-                              PositiveSmallIntegerField, DateTimeField,
-                              TextChoices, CASCADE, )
-from django.dispatch import receiver
+from django.db.models import CASCADE
+from django.db.models import CharField
+from django.db.models import DateTimeField
+from django.db.models import ForeignKey
+from django.db.models import ImageField
+from django.db.models import ManyToManyField
+from django.db.models import Model
+from django.db.models import PositiveSmallIntegerField
+from django.db.models import SlugField
+from django.db.models import TextChoices
+from django.db.models import TextField
 from django.db.models.signals import post_delete
-
+from django.dispatch import receiver
 from django.urls import reverse
 
 from users.models import User
@@ -28,6 +34,7 @@ class Follow(Model):
 
 class Ingredient(Model):
     title = CharField(max_length=100,
+                      unique=True,
                       verbose_name='название ингредиента', )
     unit = CharField(max_length=64,
                      verbose_name='единица измерения', )
@@ -42,7 +49,6 @@ class Ingredient(Model):
 
 
 class Tag(Model):
-
     class Color(TextChoices):
         green = 'green'
         orange = 'orange'
@@ -75,10 +81,10 @@ class Recipe(Model):
                        blank=True,
                        null=True,
                        help_text='Здесь можно загрузить картинку',
-                       verbose_name='загрузить фото', )
+                       verbose_name='загрузить картинку', )
     description = TextField(verbose_name='описание', )
     ingredients = ManyToManyField(Ingredient,
-                                  through='AmountOfIngredients',
+                                  through='AmountOfIngredient',
                                   related_name='recipe_ingredient',
                                   verbose_name='ингредиенты', )
     tags = ManyToManyField(Tag,
@@ -116,7 +122,7 @@ def submission_delete(sender, instance, **kwargs):
     instance.image.delete(False)
 
 
-class AmountOfIngredients(Model):
+class AmountOfIngredient(Model):
     amount = PositiveSmallIntegerField(verbose_name='количество ингредиента')
     recipe = ForeignKey(Recipe,
                         on_delete=CASCADE,
