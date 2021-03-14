@@ -1,15 +1,33 @@
 import random
 
 WORDS = (
-    'do', 'deserunt', 'proident', 'tempor', 'voluptate', 'dolor', 'pariatur',
-    'culpa', 'fugiat', 'ipsum', 'ullamco', 'ad', 'consequat', 'lorem', 'ut',
-    'nulla', 'sunt', 'mollit', 'nisi', 'reprehenderit', 'eu', 'commodo',
-    'occaecat', 'quis', 'excepteur', 'et', 'velit', 'id', 'cillum', 'nostrud',
-    'enim', 'ea', 'irure', 'aliquip', 'qui', 'consectetur', 'aute',
-    'cupidatat', 'laborum', 'labore', 'laboris', 'sed', 'in', 'sit', 'anim',
-    'eiusmod', 'veniam', 'adipiscing', 'duis', 'elit', 'dolore', 'est',
-    'minim', 'exercitation', 'magna', 'non', 'sint', 'incididunt', 'ex',
-    'officia', 'aliqua', 'esse', 'amet')
+    'dolor', 'molestiae', 'a', 'vero', 'harum', 'qui', 'fugiat', 'atque',
+    'provident', 'voluptate', 'non', 'voluptatum', 'unde', 'dolorem',
+    'laudantium', 'neque', 'iusto', 'ipsa', 'ea', 'ullam', 'cupiditate',
+    'labore', 'vitae', 'dicta', 'sequi', 'modi', 'quam', 'quo', 'autem',
+    'repudiandae', 'aliquam', 'ipsum', 'enim', 'at', 'nisi', 'in', 'doloribus',
+    'accusantium', 'nihil', 'mollitia', 'corporis', 'eveniet', 'et',
+    'consectetur', 'ducimus', 'consequuntur', 'libero', 'sint', 'error',
+    'eligendi', 'tenetur', 'placeat', 'adipisci', 'delectus', 'saepe',
+    'necessitatibus', 'hic', 'corrupti', 'odio', 'sunt', 'magnam', 'excepturi',
+    'consequatur', 'distinctio', 'praesentium', 'illo', 'laboriosam', 'illum',
+    'tempore', 'architecto', 'repellat', 'tempora', 'odit', 'minima', 'vel',
+    'itaque', 'ab', 'culpa', 'rerum', 'expedita', 'veritatis', 'asperiores',
+    'magni', 'iure', 'rem', 'soluta', 'debitis', 'cumque', 'sit', 'recusandae',
+    'porro', 'repellendus', 'perspiciatis', 'facere', 'suscipit', 'voluptatem',
+    'molestias', 'voluptates', 'ratione', 'maxime', 'ad', 'explicabo', 'nulla',
+    'ut', 'amet', 'assumenda', 'alias', 'quae', 'est', 'velit', 'animi',
+    'omnis', 'numquam', 'totam', 'natus', 'quia', 'aspernatur', 'id', 'eius',
+    'iste', 'fugit', 'sapiente', 'quidem', 'ipsam', 'pariatur', 'quod',
+    'quibusdam', 'eum', 'earum', 'voluptas', 'sed', 'nam', 'quos', 'deleniti',
+    'accusamus', 'similique', 'laborum', 'minus', 'esse', 'exercitationem',
+    'nostrum', 'doloremque', 'quisquam', 'nobis', 'commodi', 'quasi', 'cum',
+    'officiis', 'perferendis', 'maiores', 'reiciendis', 'obcaecati', 'veniam',
+    'inventore', 'quis', 'dolores', 'quaerat', 'dignissimos', 'quas', 'beatae',
+    'voluptatibus', 'impedit', 'aliquid', 'ex', 'possimus', 'deserunt',
+    'incidunt', 'aperiam', 'dolore', 'temporibus', 'facilis', 'reprehenderit',
+    'eos', 'optio', 'blanditiis', 'eaque', 'nesciunt', 'officia', 'fuga',
+    'nemo', 'aut', 'dolorum')
 
 
 class TextLorem:

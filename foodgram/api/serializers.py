@@ -1,45 +1,46 @@
-from rest_framework.serializers import ModelSerializer
 from rest_framework.exceptions import ValidationError
+from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import CurrentUserDefault
+from rest_framework.serializers import HiddenField
 
-from recipes.models import Follow, Favorite, Purchase, Ingredient
-
-
-class AuthorSerializer(ModelSerializer):
-
-    def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
-        return self.Meta.model.objects.create(**validated_data)
-
-    class Meta:
-        model = None
+from recipes.models import Favorite
+from recipes.models import Follow
+from recipes.models import Ingredient
+from recipes.models import Purchase
 
 
-class FollowSerializer(AuthorSerializer):
+def validate_author(data):
+    if data.get('author') == data.get('user'):
+        raise ValidationError('You can\'t follow yourself!')
+    return data
 
-    def validate_author(self, author_id):
-        user = self.context['request'].user
-        if user.id == author_id:
-            raise ValidationError('You can\'t follow yourself!')
-        return author_id
+
+class FollowSerializer(CurrentUserDefault, ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
 
     class Meta:
-        fields = ['author', ]
+        fields = ('author', 'user')
         model = Follow
+        validators = (validate_author, )
 
 
-class FavoriteSerializer(AuthorSerializer):
+class FavoriteSerializer(CurrentUserDefault, ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
+
     class Meta:
-        fields = ['recipe', ]
+        fields = ('recipe', 'user')
         model = Favorite
 
 
-class PurchaseSerializer(AuthorSerializer):
+class PurchaseSerializer(CurrentUserDefault, ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
+
     class Meta:
-        fields = ['recipe', ]
+        fields = ('recipe', 'user')
         model = Purchase
 
 
 class IngredientSerializer(ModelSerializer):
     class Meta:
-        fields = ['title', 'unit']
+        fields = ('title', 'unit')
         model = Ingredient

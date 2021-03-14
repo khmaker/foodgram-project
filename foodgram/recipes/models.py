@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db.models import CASCADE
 from django.db.models import CharField
 from django.db.models import DateTimeField
@@ -13,7 +14,8 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.urls import reverse
 
-from users.models import User
+
+User = get_user_model()
 
 
 class Follow(Model):
@@ -29,7 +31,7 @@ class Follow(Model):
     class Meta:
         verbose_name = 'подписка'
         verbose_name_plural = 'подписки'
-        unique_together = ['user', 'author']
+        unique_together = ('user', 'author')
 
 
 class Ingredient(Model):
@@ -42,7 +44,7 @@ class Ingredient(Model):
     class Meta:
         verbose_name = 'ингредиент'
         verbose_name_plural = 'ингредиенты'
-        ordering = ['title']
+        ordering = ('title', )
 
     def __str__(self):
         return self.title
@@ -101,7 +103,7 @@ class Recipe(Model):
                      verbose_name='уникальная часть URL для рецепта', )
 
     class Meta:
-        ordering = ['-pub_date', 'title', ]
+        ordering = ('-pub_date', 'title', )
         verbose_name = 'рецепт'
         verbose_name_plural = 'рецепты'
 
@@ -133,7 +135,7 @@ class AmountOfIngredient(Model):
 
     class Meta:
         verbose_name = 'количество ингредиентов'
-        unique_together = ['recipe', 'ingredient']
+        unique_together = ('recipe', 'ingredient')
 
     def __str__(self):
         return f'{self.ingredient.title}: {self.amount} {self.ingredient.unit}'
@@ -149,7 +151,7 @@ class Favorite(Model):
 
     class Meta:
         verbose_name = 'избранное'
-        unique_together = ['user', 'recipe']
+        unique_together = ('user', 'recipe')
 
     def __str__(self):
         return f'{self.user}-{self.recipe}'
@@ -168,4 +170,4 @@ class Purchase(Model):
     class Meta:
         verbose_name = 'покупка'
         verbose_name_plural = 'покупки'
-        unique_together = ['user', 'recipe']
+        unique_together = ('user', 'recipe')
