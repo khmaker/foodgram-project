@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env.get('SECRET_KEY', default=1)
 
-DEBUG = int(env.get('DEBUG', default=1))
+DEBUG = int(env.get('DEBUG', default=0))
 
 ALLOWED_HOSTS = env.get('ALLOWED_HOSTS', default='localhost 127.0.0.1').split()
 
