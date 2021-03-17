@@ -42,6 +42,8 @@ class RecipeForm(forms.ModelForm):
         if not self.ingredients:
             raise forms.ValidationError('Empty ingredients list not allowed')
         for title, amount in self.ingredients.items():
+            if amount.get('amount') < 0:
+                raise forms.ValidationError(f'Invalid value for {title}')
             try:
                 ingredient = Ingredient.objects.filter(title=title).get()
                 self.ingredients[title].update({'object': ingredient})
