@@ -1,12 +1,12 @@
 *.md
 
-./.idea
-./.git
+.idea
+.git
 
-./venv
-./tests
+venv
+tests
 
 Dockerfile
 docker-compose.yaml
 
-./nginx
+nginx
