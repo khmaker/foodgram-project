@@ -1,27 +1,31 @@
-from rest_framework import filters
-from rest_framework import mixins
-from rest_framework import status
-from rest_framework import viewsets
+# coding=utf-8
+from rest_framework.filters import SearchFilter
+from rest_framework.mixins import (
+    CreateModelMixin, DestroyModelMixin,
+    ListModelMixin,
+)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
+from rest_framework.viewsets import GenericViewSet
 
-from recipes.models import Favorite
-from recipes.models import Follow
-from recipes.models import Ingredient
-from api.serializers import FavoriteSerializer
-from api.serializers import FollowSerializer
-from api.serializers import IngredientSerializer
-from api.serializers import PurchaseSerializer
+from api.serializers import (
+    FavoriteSerializer, FollowSerializer,
+    IngredientSerializer, PurchaseSerializer,
+)
+from recipes.models import Favorite, Follow, Ingredient
 
 
-class CreateDestroyViewSet(mixins.CreateModelMixin,
-                           mixins.DestroyModelMixin,
-                           viewsets.GenericViewSet):
+class CreateDestroyViewSet(
+    CreateModelMixin,
+    DestroyModelMixin,
+    GenericViewSet
+):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         success = instance.delete()
-        return Response({'success': bool(success)}, status=status.HTTP_200_OK)
+        return Response({'success': bool(success)}, status=HTTP_200_OK)
 
 
 class FollowViewSet(CreateDestroyViewSet):
@@ -47,8 +51,8 @@ class PurchaseViewSet(CreateDestroyViewSet):
         return self.request.user.purchases.all()
 
 
-class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class IngredientViewSet(ListModelMixin, GenericViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (SearchFilter,)
     search_fields = ('$title',)

@@ -1,12 +1,11 @@
-from django.urls import include
-from django.urls import path
+# coding=utf-8
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from api.views import FavoritesViewSet
-from api.views import FollowViewSet
-from api.views import IngredientViewSet
-from api.views import PurchaseViewSet
-
+from api.views import (
+    FavoritesViewSet, FollowViewSet, IngredientViewSet,
+    PurchaseViewSet,
+)
 
 router = DefaultRouter()
 router.register(r'subscriptions', FollowViewSet, basename='subscriptions')

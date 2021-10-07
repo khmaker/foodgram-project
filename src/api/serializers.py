@@ -1,12 +1,11 @@
+# coding=utf-8
 from rest_framework.exceptions import ValidationError
-from rest_framework.serializers import ModelSerializer
-from rest_framework.serializers import CurrentUserDefault
-from rest_framework.serializers import HiddenField
+from rest_framework.serializers import (
+    CurrentUserDefault, HiddenField,
+    ModelSerializer,
+)
 
-from recipes.models import Favorite
-from recipes.models import Follow
-from recipes.models import Ingredient
-from recipes.models import Purchase
+from recipes.models import Favorite, Follow, Ingredient, Purchase
 
 
 def validate_author(data):
@@ -21,7 +20,7 @@ class FollowSerializer(CurrentUserDefault, ModelSerializer):
     class Meta:
         fields = ('author', 'user')
         model = Follow
-        validators = (validate_author, )
+        validators = (validate_author,)
 
 
 class FavoriteSerializer(CurrentUserDefault, ModelSerializer):

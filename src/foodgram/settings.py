@@ -1,7 +1,5 @@
-"""Django settings file"""
-
-from os import environ as env
-from os import path
+# coding=utf-8
+from os import environ as env, path
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -28,7 +26,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sorl.thumbnail',
     'rest_framework',
-
 ]
 
 MIDDLEWARE = [

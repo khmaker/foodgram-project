@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.contrib.auth import login
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -6,7 +7,6 @@ from users.forms import CreationForm
 
 
 class SignUp(CreateView):
-
     form_class = CreationForm
     success_url = reverse_lazy('index')
     template_name = 'registration/registration.html'

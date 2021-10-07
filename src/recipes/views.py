@@ -1,17 +1,15 @@
+# coding=utf-8
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from django.views.generic import DeleteView
-from django.views.generic import DetailView
-from django.views.generic import ListView
-from django.views.generic import UpdateView
+from django.views.generic import (
+    CreateView, DeleteView, DetailView, ListView,
+    UpdateView,
+)
 
-from users.models import User
 from recipes.forms import RecipeForm
-from recipes.models import Recipe
-from recipes.models import Tag
+from recipes.models import Recipe, Tag
+from users.models import User
 
 
 class BaseListView(ListView):
@@ -28,8 +26,10 @@ class BaseListView(ListView):
         queryset = super().get_queryset()
         tags_to_show = self.request.GET.getlist('tags')
         self.tags = Tag.objects.filter(recipes__in=queryset).distinct()
-        return (queryset.filter(tags__slug__in=tags_to_show).distinct()
-                if tags_to_show else queryset)
+        return (
+            queryset.filter(tags__slug__in=tags_to_show).distinct()
+            if tags_to_show else queryset
+        )
 
 
 class RecipeListView(BaseListView):
@@ -42,8 +42,10 @@ class AuthorListView(BaseListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        self.author = get_object_or_404(User,
-                                        username=self.kwargs.get('username'))
+        self.author = get_object_or_404(
+            User,
+            username=self.kwargs.get('username')
+            )
         self.tags = Tag.objects.filter(recipes__author=self.author).distinct()
         queryset = queryset.filter(author=self.author)
         return queryset

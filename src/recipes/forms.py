@@ -1,9 +1,8 @@
+# coding=utf-8
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 
-from recipes.models import AmountOfIngredient
-from recipes.models import Ingredient
-from recipes.models import Recipe
+from recipes.models import AmountOfIngredient, Ingredient, Recipe
 
 
 class RecipeForm(forms.ModelForm):
@@ -28,10 +27,13 @@ class RecipeForm(forms.ModelForm):
         recipe.save()
         objects = []
         for data in self.ingredients.values():
-            objects.append(AmountOfIngredient(recipe=recipe,
-                                              ingredient=data.get('object'),
-                                              amount=data.get('amount'), )
-                           )
+            objects.append(
+                AmountOfIngredient(
+                    recipe=recipe,
+                    ingredient=data.get('object'),
+                    amount=data.get('amount'),
+                )
+            )
         if objects:
             recipe.amount.all().delete()
             AmountOfIngredient.objects.bulk_create(objects)
@@ -53,9 +55,11 @@ class RecipeForm(forms.ModelForm):
 
     class Meta:
         model = Recipe
-        fields = ('title',
-                  'image',
-                  'description',
-                  'tags',
-                  'cook_time',)
-        widgets = {'tags': forms.CheckboxSelectMultiple(), }
+        fields = (
+            'title',
+            'image',
+            'description',
+            'tags',
+            'cook_time',
+        )
+        widgets = {'tags': forms.CheckboxSelectMultiple()}

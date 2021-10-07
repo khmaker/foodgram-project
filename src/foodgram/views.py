@@ -1,3 +1,4 @@
+# coding=utf-8
 import os
 from tempfile import NamedTemporaryFile
 
@@ -24,8 +25,9 @@ def download_cart(request):
         text = ''
         user = request.user
         cart = user.purchases.prefetch_related('recipe')
-        cart = cart.values('recipe__ingredients__title',
-                           'recipe__ingredients__unit', )
+        cart = cart.values(
+            'recipe__ingredients__title',
+            'recipe__ingredients__unit', )
         ingredients = cart.annotate(amount=Sum('recipe__amount__amount')).all()
         for i in ingredients.order_by('recipe__ingredients__title'):
             title = i.get('recipe__ingredients__title')
@@ -35,9 +37,11 @@ def download_cart(request):
                 text += f'{title}: {amount} {unit}\n'
         file.write(bytes(text, encoding='utf-8'))
         file.seek(0)
-    response = FileResponse(open(temp.name, 'rb'),
-                            filename='cart.txt',
-                            as_attachment=True)
+    response = FileResponse(
+        open(temp.name, 'rb'),
+        filename='cart.txt',
+        as_attachment=True,
+    )
     os.remove(temp.name)
     return response
 
