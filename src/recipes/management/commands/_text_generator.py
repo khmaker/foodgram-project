@@ -1,3 +1,4 @@
+# coding=utf-8
 import random
 
 WORDS = (
@@ -31,9 +32,12 @@ WORDS = (
 
 
 class TextLorem:
-    def __init__(self, wsep=' ', ssep=' ', psep='\n\n', send='.',
-                 srange=(4, 8), prange=(5, 10), trange=(3, 6),
-                 words=None):
+
+    def __init__(
+        self, wsep=' ', ssep=' ', psep='\n\n', send='.',
+        srange=(4, 8), prange=(5, 10), trange=(3, 6),
+        words=None
+        ):
         self._wsep = wsep
         self._ssep = ssep
         self._psep = psep

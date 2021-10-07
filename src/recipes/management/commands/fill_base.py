@@ -1,9 +1,10 @@
+# coding=utf-8
 from django.core.management.base import BaseCommand
 
-from ._users import add_users
-from ._tags import add_tags
-from ._recipe import add_recipe
-from ._ingredient import add_ingredients
+from recipes.management.commands._ingredient import add_ingredients
+from recipes.management.commands._recipe import add_recipe
+from recipes.management.commands._tags import add_tags
+from recipes.management.commands._users import add_users
 
 
 class Command(BaseCommand):

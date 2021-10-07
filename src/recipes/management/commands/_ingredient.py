@@ -1,3 +1,4 @@
+# coding=utf-8
 from recipes.models import Ingredient
 
 
@@ -7,8 +8,10 @@ def add_ingredients():
         for i in file:
             title, _, unit = i.strip().rpartition(',')
             try:
-                ingredient, created = create(title=title,
-                                             unit=unit)
+                ingredient, created = create(
+                    title=title,
+                    unit=unit,
+                )
                 if created:
                     ingredient.save()
             except Exception as e:
